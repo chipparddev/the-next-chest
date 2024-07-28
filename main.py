@@ -198,8 +198,8 @@ class Item_Manager:
         return page, page_position
 
     def check_for_knowledge_level(self):
-        while self.knowledge_progress >= self.knowledge * 10:
-            self.knowledge_progress -= self.knowledge * 10
+        while self.knowledge_progress >= self.knowledge * 15:
+            self.knowledge_progress -= self.knowledge * 15
             self.knowledge += 1
 
     def get_knowledge(self):

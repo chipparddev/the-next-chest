@@ -22,7 +22,7 @@ def write_wave_info(window, wave, hp_drain_magnitude, hp_drain_time):
 def write_actions_and_knowledge(window, remaining_actions, knowledge, knowledge_progress):
     window.clear()
     window.addstr(0, 0, f'{remaining_actions} remaining actions')
-    window.addstr(1, 0, f'Level {knowledge} knowledge (Next level: {knowledge_progress}/{knowledge * 10})')
+    window.addstr(1, 0, f'Level {knowledge} knowledge (Next level: {knowledge_progress}/{knowledge * 15})')
 
 def write_chest_info(window, tier, max_hp, remaining_hp = None):
     death_type = 'dangerous' if tier == 1 else 'safe'
