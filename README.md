@@ -49,7 +49,7 @@ Here's a detailed explanation of how this works:
 *Every item has a slot (weapon, shield, armour, or gem), a style (melee or ranged), and a weight (light, medium, or heavy). In addition, every weapon has a hidden variant (1 or 2). When the new item is being created, each of its attributes will be randomly inherited from one of the two items that are being recycled.* 
 
 - *If item 1 has the properties {shield, melee, light} and item 2 has the properties {shield, melee, light}, the new item will also have the properties {shield, melee, light}, and resultantly, will be guaranteed to be of the same base type.*
-- *If item 1 has the properties {shield, melee, light} and item 2 has the properties {armour, ranged, heavy}, the new item will either be a shield or an armour, will be either melee-based or ranged-based, and will either be light or heavy.*
+- *If item 1 has the properties {shield, melee, light} and item 2 has the properties {armour, ranged, heavy}, the new item will either be a shield or an armour, will either be melee-based or ranged-based, and will either be light or heavy.*
 
 ### Scrapping
 
