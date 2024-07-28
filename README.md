@@ -10,7 +10,7 @@
 - If you're using Windows, you'll also need to install the curses module by typing ```pip install windows-curses``` into your command prompt.
 - In your command prompt/terminal, navigate to the folder containing the game files, and type ```py main.py``` or ```python main.py``` or ```python3 main.py``` to start the game (depends on your operating system).
 
-# Gameplay
+# How To Play
 
 ## Chest Waves
 
