@@ -178,6 +178,9 @@ class Item_Manager:
             item = self.inventory.pop(get_inventory_position(page, page_position))
             page, page_position = self.check_cursor_validity(page, page_position)
             return True, page, page_position, f"Deleted {item.get_output('compact')}"
+        
+    def sort_inventory(self):
+        self.inventory.sort(key = lambda item : item.get_sorting_priority())
 
     def update_stats(self, stat_changes, reverse = False):
         for stat_name, magnitude in stat_changes.items():
@@ -417,6 +420,13 @@ class Item():
     
     def get_search_path(self):
         return self.style, self.weight, self.variant
+    
+    def get_sorting_priority(self):
+        slot_priority = {'weapon' : 0, 'shield' : 1, 'armour' : 2, 'gem' : 3}[self.slot]
+        style_priority = {'melee' : 0, 'ranged' : 1}[self.style]
+        weight_priority = {'light' : 0, 'medium' : 1, 'heavy' : 2}[self.weight]
+        variant_priority = self.variant if self.variant else 0
+        return (- self.tier, slot_priority, style_priority, weight_priority, variant_priority)
         
     def __str__(self):
         if self.modifiable:
@@ -818,7 +828,7 @@ def game(stdscr, game_top, game_left):
     item_details_bottom, item_details_right = get_endpoints(item_details_pad, item_details_top, item_details_left)
 
     write_cursor(cursor_window, cursor_character, cursor_row)
-    write_wave_info(wave_info_window, wave, hp_drain_magnitude, hp_drain_time)
+    write_wave_info(wave_info_window, wave, hp_drain_magnitude, hp_drain_time, False)
     write_actions_and_knowledge(actions_and_knowledge_window, remaining_actions, item_manager.get_knowledge(), item_manager.get_knowledge_progress())
     write_chest_info(chest_info_window, chest_tier, chest_max_hp)
     write_controls(controls_window, fast_forward, modifier_ranges)
@@ -834,7 +844,7 @@ def game(stdscr, game_top, game_left):
     while True:
         input = stdscr.getch()
 
-        if input in (ord('w'), ord('s'), ord('a'), ord('d'), ord('e'), ord('z'), ord('x'), ord('c'), ord('v'), ord('b'), ord('1'), ord('2'), 8, 10, 27):
+        if input in (ord('w'), ord('s'), ord('a'), ord('d'), ord('e'), ord('z'), ord('x'), ord('c'), ord('v'), ord('b'), ord('1'), ord('2'), ord(' '), 8, 10, 27):
             if perf_counter() - key_cooldown_duration > get_stat_magnitude(key_timestamps, input):
                 key_timestamps[input] = perf_counter()
 
@@ -975,6 +985,13 @@ def game(stdscr, game_top, game_left):
                             messages.appendleft({'text' : message, 'timestamp' : perf_counter()})
                             write_messages(messages_window, messages)
 
+                    elif input == ord(' '): # Spacebar
+                        item_manager.sort_inventory()
+                        item_list_pad, page, cursor_row = item_manager.get_item_list_output(page, cursor_row)
+                        item_details_pad, cursor_row = item_manager.get_item_details_output(page, cursor_row, item_details_variant)
+                        messages.appendleft({'text' : 'Sorted inventory', 'timestamp' : perf_counter()})
+                        write_messages(messages_window, messages)
+
                     elif remaining_actions > 0:
                         if input == ord('z'): # Identify
                             success, message = item_manager.identify_item(page, cursor_row)
@@ -1049,6 +1066,7 @@ def game(stdscr, game_top, game_left):
             
             chest_remaining_hp = chest_max_hp
             remaining_hp_drain_time = hp_drain_time
+            write_wave_info(wave_info_window, wave, hp_drain_magnitude, hp_drain_time, True)
             write_chest_info(chest_info_window, chest_tier, chest_max_hp, chest_remaining_hp)
 
             death_type = 'dangerous'
@@ -1109,7 +1127,7 @@ def game(stdscr, game_top, game_left):
                         chest_tier = 1
                         remaining_actions = 10 + item_manager.get_equipment_tier_total()
                         hp_drain_magnitude, hp_drain_time, chest_max_hp = get_wave_stats(wave)
-                        write_wave_info(wave_info_window, wave, hp_drain_magnitude, hp_drain_time)
+                        write_wave_info(wave_info_window, wave, hp_drain_magnitude, hp_drain_time, False)
                         write_actions_and_knowledge(actions_and_knowledge_window, remaining_actions, item_manager.get_knowledge(), item_manager.get_knowledge_progress())
                         write_chest_info(chest_info_window, chest_tier, chest_max_hp)
 

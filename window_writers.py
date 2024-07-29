@@ -14,9 +14,10 @@ def write_cursor_and_marker(window, cursor_character, cursor_row, marker_charact
     window.addstr(marker_row, 0, f'{marker_character}')
     window.addstr(cursor_row, 0, f'{cursor_character}')
 
-def write_wave_info(window, wave, hp_drain_magnitude, hp_drain_time):
+def write_wave_info(window, wave, hp_drain_magnitude, hp_drain_time, in_combat):
+    enter_prompt = '' if in_combat else '(Press Enter to start)'
     window.clear()
-    window.addstr(0, 0, f'You are on wave {wave}')
+    window.addstr(0, 0, f'You are on wave {wave} {enter_prompt}')
     window.addstr(1, 0, f'The HP drain rate is {hp_drain_magnitude} every {hp_drain_time}s')
 
 def write_actions_and_knowledge(window, remaining_actions, knowledge, knowledge_progress):
@@ -38,5 +39,5 @@ def write_messages(window, messages):
         window.addstr(row, 0, text)
 
 def write_controls(window, fast_forward, modifier_ranges):
-    window.addstr(0, 0, f'General controls  | WASD: Move, E: Equip/Unequip, Enter: Begin combat, ESC: Exit game, 1: Toggle fast forward ({fast_forward}) ')
+    window.addstr(0, 0, f'General controls  | ESC: Exit, WASD: Move, E: Equip/Unequip, Space: Sort inventory, 1: Toggle fast forward ({fast_forward}) ')
     window.addstr(1, 0, f'Crafting controls | Z: Identify, X: Reroll, C: Recycle, V: Scrap, B: Delete, 2: Toggle modifier ranges ({modifier_ranges}) ')
