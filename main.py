@@ -985,7 +985,7 @@ def game(stdscr, game_top, game_left):
                             messages.appendleft({'text' : message, 'timestamp' : perf_counter()})
                             write_messages(messages_window, messages)
 
-                    elif input == ord(' '): # Spacebar
+                    elif input == ord(' '): # Sort inventory (Space)
                         item_manager.sort_inventory()
                         item_list_pad, page, cursor_row = item_manager.get_item_list_output(page, cursor_row)
                         item_details_pad, cursor_row = item_manager.get_item_details_output(page, cursor_row, item_details_variant)
